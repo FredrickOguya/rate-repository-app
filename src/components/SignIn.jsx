@@ -13,6 +13,13 @@ const styles = StyleSheet.create({
         marginBottom: 15,
         borderRadius: 4,
     },
+    inputError: {
+        borderColor: '#d73a4a'
+    },
+    errorText: {
+        color: '#d73a4a',
+        marginBottom: 10,
+    },
     button: {
         backgroundColor: '#0366d6',
         padding: 15,
@@ -28,6 +35,20 @@ const SignIn = () => {
     const onSubmit = (values) => {
         console.log(values)
     }
+
+    const validate = (values) => {
+        const errors = {};
+
+        if(!values.username) {
+            errors.username = 'username is required';
+        }
+
+        if(!values.password){
+            errors.password = 'password is required'
+        }
+
+        return errors;
+    }
     return (
         <Formik
             initialValues={{
@@ -35,22 +56,40 @@ const SignIn = () => {
                 password: '',
             }}
             onSubmit={onSubmit}
+            validate={validate}
         >
-            {({ handleChange, handleSubmit, values }) => (
+            {({ handleChange, handleSubmit, values, errors, touched }) => (
                     <View style={styles.container}>
                         <TextInput
-                            style={styles.input}
+                            style={[
+                                styles.input,
+                                touched.username && errors.username && styles.inputError
+                            ]}
                             placeholder="Name"
                             value={values.username}
                             onChangeText={handleChange('username')}
                         />
+                        {touched.username && errors.username && (
+                            <Text style={styles.errorText}>
+                                {errors.username}
+                            </Text>
+                        )}
                         <TextInput
-                         style={styles.input}
+                         style={[
+                            styles.input,
+                            touched.password && errors.password && styles.inputError
+                        ]}
                          placeholder="Password"
                          value={values.password}
                          onChangeText={handleChange('password')}
                          secureTextEntry
                         />
+
+                        {touched.password && errors.password && (
+                            <Text style={styles.errorText}>
+                                {errors.password}
+                            </Text>
+                        )}
 
                         <Pressable
                             style={styles.button}
