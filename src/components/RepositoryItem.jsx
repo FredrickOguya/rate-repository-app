@@ -1,40 +1,115 @@
-import Constants from 'expo-constants'
-import { StyleSheet, View,Text } from "react-native"
+import { StyleSheet, View, Text, Image } from 'react-native';
+import theme from '../themes';
 
+const formatCount = (count) => {
+    if (count < 1000) {
+        return count.toString();
+    }
+
+    return `${(count / 1000).toFixed(1)}k`;
+};
 
 const styles = StyleSheet.create({
     container: {
-        marginTop: Constants.statusBarHeight,
+        backgroundColor: 'white',
+        padding: 15,
+        marginBottom: 10,
+    },
+    top: {
+        flexDirection: 'row',
+    },
+    avatar: {
+        width: 50,
+        height: 50,
+        borderRadius: 4,
+    },
+    content: {
         flex: 1,
+        marginLeft: 15,
+    },
+    repositoryName: {
+        fontWeight: 'bold',
+        marginBottom: 5,
+    },
+    description: {
+        marginBottom: 10,
+    },
+    language: {
+        alignSelf: 'flex-start',
+        backgroundColor: theme.colors.primary,
+        color: 'white',
+        padding: 5,
+        borderRadius: 4,
+    },
+    stats: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        marginTop: 20,
+    },
+    stat: {
+        alignItems: 'center',
+    },
+    statValue: {
+        fontWeight: 'bold',
+        fontSize: 18,
     },
 });
+
 const RepositoryItem = ({ repository }) => {
     return (
         <View style={styles.container}>
-            <Text>
-                Full name: {repository.fullName}
-            </Text>
-            <Text>
-                Description: {repository.description}
-            </Text>
-            <Text>
-                Language: {repository.language}
-            </Text>
-            <Text>
-                Stars: {repository.stargazersCount}
-            </Text>
-            <Text>
-               Forks: {repository.forksCount}
-            </Text>     
-            <Text>
-               Reviews: {repository.reviewCount}
-            </Text>
-            <Text>
-               Rating: {repository.ratingAverage}
-            </Text>
+            <View style={styles.top}>
+                <Image
+                    style={styles.avatar}
+                    source={{ uri: repository.ownerAvatarUrl }}
+                />
+
+                <View style={styles.content}>
+                    <Text style={styles.repositoryName}>
+                        {repository.fullName}
+                    </Text>
+
+                    <Text style={styles.description}>
+                        {repository.description}
+                    </Text>
+
+                    <Text style={styles.language}>
+                        {repository.language}
+                    </Text>
+                </View>
+            </View>
+
+            <View style={styles.stats}>
+                <View style={styles.stat}>
+                    <Text style={styles.statValue}>
+                        {formatCount(repository.stargazersCount)}
+                    </Text>
+                    <Text>Stars</Text>
+                </View>
+
+                <View style={styles.stat}>
+                    <Text style={styles.statValue}>
+                        {formatCount(repository.forksCount)}
+                    </Text>
+                    <Text>Forks</Text>
+                </View>
+
+                <View style={styles.stat}>
+                    <Text style={styles.statValue}>
+                        {repository.reviewCount}
+                    </Text>
+                    <Text>Reviews</Text>
+                </View>
+
+                <View style={styles.stat}>
+                    <Text style={styles.statValue}>
+                        {repository.ratingAverage}
+                    </Text>
+                    <Text>Rating</Text>
+                </View>
+            </View>
         </View>
-    )
-}
+    );
+};
 
 export default RepositoryItem;
-
