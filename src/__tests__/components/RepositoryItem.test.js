@@ -1,5 +1,5 @@
 import { render, within } from '@testing-library/react-native'
-import { RepositoryList } from '../components/RepositoryList';
+import { RepositoryList } from '../../components/RepositoryList';
 
 
 describe('RepositoryList',  () => {
