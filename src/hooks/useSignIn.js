@@ -17,7 +17,6 @@ const useSignIn = () => {
             },
         });
         
-        console.log(response.data)
 
         const { accessToken } = response.data.authenticate;
 

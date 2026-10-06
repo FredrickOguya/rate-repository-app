@@ -10,7 +10,6 @@ const authStorage = new AuthStorage();
 const apolloClient = createApolloClient(authStorage);
 
 const App = () => {
-    console.log("env check: ", process.env.EXPO_PUBLIC_ENV)
   return(
     <>
         <StatusBar style="auto"/>

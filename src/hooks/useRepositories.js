@@ -6,13 +6,13 @@ const useRepositories = () => {
         fetchPolicy: 'cache-and-network',
     });
 
-    const repositories = data?.repositories || {edges: []};
+    const repositories = data?.repositories || { edges: [] };
 
     return {
         repositories,
         loading,
         refetch
-    }
-}
+    };
+};
 
 export default useRepositories;
