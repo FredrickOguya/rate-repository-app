@@ -16,7 +16,17 @@ const CREATE_REVIEW = gql`
     }
 `;
 
+const CREATE_USER = gql`
+    mutation CreateUser($user: CreateUserInput!) {
+        createUser(user: $user) {
+            id
+            username
+        }
+    }
+`;
+
 export {
    AUTHENTICATE,
-   CREATE_REVIEW
+   CREATE_REVIEW,
+   CREATE_USER
 }
