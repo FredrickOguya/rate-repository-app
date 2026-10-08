@@ -42,9 +42,13 @@ const AppBar = () => {
                         <Link to={"/createreview" } component={Pressable} style={styles.tab}>
                             <Text style={styles.tabText}>Create Review</Text>
                         </Link>
+                        <Link to={'/myreviews'} conpment={Pressable} style={styles.tab}>
+                            <Text style={styles.tabText}>My Reviews</Text>
+                        </Link>
                         <Pressable onPress={signOut} style={styles.tab}>
                             <Text style={styles.tabText}>Sign out</Text>
                         </Pressable>
+
 
                     </>
                     

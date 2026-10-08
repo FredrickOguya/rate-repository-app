@@ -16,11 +16,14 @@ const styles = StyleSheet.create({
   },
   searchInput: {
     backgroundColor: 'white',
-    padding: 10,
-    margin: 10,
-    borderWidth: 3,
-    borderRadius: 10,
-    height: 40,
+    paddingHorizontal: 15,
+    marginHorizontal: 10,
+    marginVertical: 10,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 8,
+    height: 45,
+    fontSize: 16
   },
 });
 
@@ -63,6 +66,7 @@ const RepositoryListContainer = () => {
         style={styles.searchInput}
         value={searchKeyword}
         onChangeText={setSearchKeyword}
+        placeholder="Search repositories"
       />
 
       <Picker
