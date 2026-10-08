@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-native";
 
 import RepositoryItem from "./RepositoryItem";
 import useRepositories from "../hooks/useRepositories";
+import { useState } from "react";
+import { Picker } from "@react-native-picker/picker";
 
 const styles = StyleSheet.create({
   separator: {
@@ -14,6 +16,8 @@ const ItemSeparator = () => <View style={styles.separator} />;
 
 const RepositoryList = ({ repositories }) => {
   const navigate = useNavigate();
+
+
 
   const repositoryNodes = repositories
     ? repositories.edges.map(edge => edge.node)
@@ -33,9 +37,38 @@ const RepositoryList = ({ repositories }) => {
 };
 
 const RepositoryListContainer = () => {
-  const { repositories } = useRepositories();
+  const [orderBy, setOrderBy ] = useState('CREATED_AT');
+  const [orderDirection, setOrderDirection] = useState('DESC')
 
-  return <RepositoryList repositories={repositories} />;
+  const { repositories } = useRepositories({orderBy,orderDirection});
+
+  return (
+    <>
+      <Picker 
+        onValueChange={(value) => {
+          if (value === 'latest'){
+            setOrderBy('CREATED_AT');
+            setOrderDirection('DESC');
+          }
+          if (value === 'highest') {
+            setOrderBy('RATING_AVERAGE');
+            setOrderDirection('DESC')
+          }
+          if (value === 'lowest') {
+            setOrderBy('RATING_AVERAGE');
+            setOrderDirection('ASC')
+        }
+          
+        }}
+      >
+        <Picker.Item label="Select an Item..." style={{color: 'grey'}}/>
+        <Picker.Item label="Latest Repositories" value="latest"/>
+        <Picker.Item label="Highest rated repositories" value="highest"/>
+        <Picker.Item label="Lowest rated repositories" value="lowest"/>
+      </Picker>
+      <RepositoryList repositories={repositories} />
+    </>
+  )
 };
 
 export { RepositoryList };
