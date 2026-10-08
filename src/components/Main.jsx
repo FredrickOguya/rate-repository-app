@@ -1,8 +1,9 @@
 import {  StyleSheet, View } from 'react-native';
-import RepositoryList from './RepositoryList';
 import AppBar from './AppBar';
-import { Route, Routes, Navigate } from 'react-router-native';
+import { Route, Routes } from 'react-router-native';
 import SignIn from './SignIn';
+import SingleRepository from './SingleRepository';
+import  RepositoryListContainer  from './RepositoryList';
 
 const styles = StyleSheet.create({
     container: {
@@ -24,13 +25,18 @@ const Main = () => {
             <Routes>
                 <Route
                  path='/'
-                 element={<RepositoryList />}
+                 element={<RepositoryListContainer />}
                 />
 
 
                 <Route
                  path='/signin'
                  element={<SignIn />}
+                />
+
+                <Route
+                 path='/repositories/:id'
+                 element={<SingleRepository />}
                 />
             </Routes>
             
