@@ -1,7 +1,16 @@
-import {   View } from "react-native";
+import {   FlatList, StyleSheet, View } from "react-native";
 import { useParams } from "react-router-native";
 import useRepository from '../hooks/useRepository'
 import RepositoryItem from "./RepositoryItem";
+import ReviewItem from "./ReviewItem";
+
+const styles = StyleSheet.create({
+    separator: {
+        height: 10,
+    }
+})
+
+const ItemSeparator = () => <View style={styles.separator}></View>
 
 const SingleRepository = () => {
     const { id } = useParams();
@@ -16,17 +25,23 @@ const SingleRepository = () => {
         return <View />
     }
 
+    const reviews = repository.reviews.edges.map(edge => edge.node)
 
 
-    return (
-        <View>
-            <RepositoryItem
-             repository={repository}
-             showGitHubButton={true} 
-            />
-
-            
-        </View>
+    return (         
+        <FlatList
+            data={reviews}
+            renderItem={({item}) => (
+                <ReviewItem review={item} />
+            )}
+            ListHeaderComponent={
+                <RepositoryItem
+                    repository={repository}
+                    showGitHubButton={true} 
+                />
+            }
+            ItemSeparatorComponent={ItemSeparator}
+        />
     )
 }
 
