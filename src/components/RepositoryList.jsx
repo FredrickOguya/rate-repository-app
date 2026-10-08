@@ -1,14 +1,26 @@
-import { FlatList, Pressable, StyleSheet, View } from "react-native";
+import { FlatList, Pressable, StyleSheet, TextInput, View } from "react-native";
+
 import { useNavigate } from "react-router-native";
 
 import RepositoryItem from "./RepositoryItem";
+
 import useRepositories from "../hooks/useRepositories";
+
 import { useState } from "react";
+
 import { Picker } from "@react-native-picker/picker";
 
 const styles = StyleSheet.create({
   separator: {
     height: 10,
+  },
+  searchInput: {
+    backgroundColor: 'white',
+    padding: 10,
+    margin: 10,
+    borderWidth: 3,
+    borderRadius: 10,
+    height: 40,
   },
 });
 
@@ -16,8 +28,6 @@ const ItemSeparator = () => <View style={styles.separator} />;
 
 const RepositoryList = ({ repositories }) => {
   const navigate = useNavigate();
-
-
 
   const repositoryNodes = repositories
     ? repositories.edges.map(edge => edge.node)
@@ -37,38 +47,50 @@ const RepositoryList = ({ repositories }) => {
 };
 
 const RepositoryListContainer = () => {
-  const [orderBy, setOrderBy ] = useState('CREATED_AT');
-  const [orderDirection, setOrderDirection] = useState('DESC')
+  const [searchKeyword, setSearchKeyword] = useState('');
+  const [orderBy, setOrderBy] = useState('CREATED_AT');
+  const [orderDirection, setOrderDirection] = useState('DESC');
 
-  const { repositories } = useRepositories({orderBy,orderDirection});
+  const { repositories } = useRepositories({
+    searchKeyword,
+    orderBy,
+    orderDirection,
+  });
 
   return (
     <>
-      <Picker 
+      <TextInput
+        style={styles.searchInput}
+        value={searchKeyword}
+        onChangeText={setSearchKeyword}
+      />
+
+      <Picker
         onValueChange={(value) => {
-          if (value === 'latest'){
+          if (value === 'latest') {
             setOrderBy('CREATED_AT');
             setOrderDirection('DESC');
           }
+
           if (value === 'highest') {
             setOrderBy('RATING_AVERAGE');
-            setOrderDirection('DESC')
+            setOrderDirection('DESC');
           }
+
           if (value === 'lowest') {
             setOrderBy('RATING_AVERAGE');
-            setOrderDirection('ASC')
-        }
-          
+            setOrderDirection('ASC');
+          }
         }}
       >
-        <Picker.Item label="Select an Item..." style={{color: 'grey'}}/>
-        <Picker.Item label="Latest Repositories" value="latest"/>
-        <Picker.Item label="Highest rated repositories" value="highest"/>
-        <Picker.Item label="Lowest rated repositories" value="lowest"/>
+        <Picker.Item label="Latest Repositories" value="latest" />
+        <Picker.Item label="Highest rated repositories" value="highest" />
+        <Picker.Item label="Lowest rated repositories" value="lowest" />
       </Picker>
+
       <RepositoryList repositories={repositories} />
     </>
-  )
+  );
 };
 
 export { RepositoryList };
