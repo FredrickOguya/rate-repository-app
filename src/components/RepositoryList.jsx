@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
 
 const ItemSeparator = () => <View style={styles.separator} />;
 
-const RepositoryList = ({ repositories }) => {
+const RepositoryList = ({ repositories, onEndReached }) => {
   const navigate = useNavigate();
 
   const repositoryNodes = repositories
@@ -45,6 +45,7 @@ const RepositoryList = ({ repositories }) => {
           <RepositoryItem repository={item} />
         </Pressable>
       )}
+      onEndReachedThreshold={0.5}
     />
   );
 };
@@ -54,7 +55,8 @@ const RepositoryListContainer = () => {
   const [orderBy, setOrderBy] = useState('CREATED_AT');
   const [orderDirection, setOrderDirection] = useState('DESC');
 
-  const { repositories } = useRepositories({
+  const { repositories, fetchMore } = useRepositories({
+    first: 5,
     searchKeyword,
     orderBy,
     orderDirection,
@@ -92,7 +94,7 @@ const RepositoryListContainer = () => {
         <Picker.Item label="Lowest rated repositories" value="lowest" />
       </Picker>
 
-      <RepositoryList repositories={repositories} />
+      <RepositoryList repositories={repositories} onEndReached={fetchMore} />
     </>
   );
 };

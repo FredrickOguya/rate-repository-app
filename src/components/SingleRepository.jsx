@@ -3,6 +3,7 @@ import { useParams } from "react-router-native";
 import useRepository from '../hooks/useRepository'
 import RepositoryItem from "./RepositoryItem";
 import ReviewItem from "./ReviewItem";
+import { useState } from "react";
 
 const styles = StyleSheet.create({
     separator: {
@@ -15,7 +16,14 @@ const ItemSeparator = () => <View style={styles.separator}></View>
 const SingleRepository = () => {
     const { id } = useParams();
 
-    const { repository, loading } = useRepository(id)
+    const { 
+        repository, 
+        loading, 
+        fetchMore 
+    } = useRepository(id);
+
+    const [loadingMore, setLoadingMore] = useState(false);
+
 
     if (loading) {
         return <View />
@@ -25,7 +33,29 @@ const SingleRepository = () => {
         return <View />
     }
 
-    const reviews = repository.reviews.edges.map(edge => edge.node)
+    const reviews = repository.reviews.edges.map(edge => edge.node);
+
+    const pageInfo = repository.reviews.pageInfo;
+
+    const onEndReach = async () => {
+        if (!pageInfo.hasNextPage || loadingMore){
+            return;
+        }
+
+        setLoadingMore(true)
+
+        try {
+            await fetchMore({
+                variables:{
+                    id,
+                    first: 2,
+                    after: pageInfo.endCursor,
+                },
+            });
+        } finally {
+            setLoadingMore(false)
+        }
+    }
 
 
     return (         
@@ -34,6 +64,7 @@ const SingleRepository = () => {
             renderItem={({item}) => (
                 <ReviewItem review={item} />
             )}
+            keyExtractor={item => item.id}
             ListHeaderComponent={
                 <RepositoryItem
                     repository={repository}
@@ -41,6 +72,8 @@ const SingleRepository = () => {
                 />
             }
             ItemSeparatorComponent={ItemSeparator}
+            onEndReached={onEndReach}
+            onEndReachedThreshold={0.5}
         />
     )
 }
